@@ -7,12 +7,6 @@ import ChartWidget from "../components/widgets/ChartWidget";
 import CounterWidget from "../components/widgets/CounterWidget";
 import ListWidget from "../components/widgets/ListWidget";
 import SummaryWidget from "../components/widgets/SummaryWidget";
-import {
-  tasksList,
-  habitData,
-  goalProgress,
-  recentActivities,
-} from "../data/mockData";
 import { useUserPreferences } from "../context/UserPreferencesContext";
 
 const MainContent = styled.main`
@@ -28,58 +22,10 @@ const DashboardPage = () => {
 
   // Crear un mapa de widgets por ID
   const widgetComponents = {
-    tasks: {
-      id: "tasks",
-      component: (
-        <div
-          style={{
-            borderTop: `3px solid ${widgetColors.tasks}`,
-            display: widgetVisibility.tasks ? "block" : "none",
-          }}
-        >
-          <ListWidget tasks={tasksList} />
-        </div>
-      ),
-    },
-    habits: {
-      id: "habits",
-      component: (
-        <div
-          style={{
-            borderTop: `3px solid ${widgetColors.habits}`,
-            display: widgetVisibility.habits ? "block" : "none",
-          }}
-        >
-          <ChartWidget data={habitData} />
-        </div>
-      ),
-    },
-    progress: {
-      id: "progress",
-      component: (
-        <div
-          style={{
-            borderTop: `3px solid ${widgetColors.progress}`,
-            display: widgetVisibility.progress ? "block" : "none",
-          }}
-        >
-          <CounterWidget data={goalProgress} />
-        </div>
-      ),
-    },
-    activity: {
-      id: "activity",
-      component: (
-        <div
-          style={{
-            borderTop: `3px solid ${widgetColors.activity}`,
-            display: widgetVisibility.activity ? "block" : "none",
-          }}
-        >
-          <SummaryWidget activities={recentActivities} />
-        </div>
-      ),
-    },
+    chart: <ChartWidget />,
+    counter: <CounterWidget />,
+    list: <ListWidget />,
+    summary: <SummaryWidget />,
   };
 
   // Filtrar widgets visibles y ordenarlos por posición
