@@ -1,158 +1,107 @@
 // src/pages/SettingsPage.jsx
 import React from "react";
-import styled from "@emotion/styled";
-import { Link } from "react-router-dom";
-import { useUserPreferences } from "../context/UserPreferencesContext";
+import Card from "../components/common/Card";
 import Button from "../components/common/Button";
-
-const SettingsContainer = styled.div`
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-`;
-
-const Section = styled.section`
-  margin-bottom: 32px;
-  background: white;
-  padding: 24px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-`;
-
-const SectionTitle = styled.h2`
-  margin-top: 0;
-  border-bottom: 1px solid #f0f0f0;
-  padding-bottom: 12px;
-`;
-
-const ColorOption = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-`;
-
-const ColorLabel = styled.label`
-  margin-right: 12px;
-  min-width: 120px;
-`;
-
-const ColorInput = styled.input`
-  padding: 4px;
-  width: 60px;
-  height: 30px;
-  cursor: pointer;
-`;
-
-const WidgetItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px;
-  margin-bottom: 8px;
-  background: #f9f9f9;
-  border-radius: 4px;
-`;
-
-const WidgetTitle = styled.span`
-  font-weight: 500;
-`;
-
-const ThemeToggle = styled.div`
-  display: flex;
-  gap: 12px;
-`;
+import { useUserPreferences } from "../context/UserPreferencesContext";
+import "./SettingsPage.css";
 
 const SettingsPage = () => {
-  const { preferences, toggleWidgetVisibility, updateColors, setTheme } =
-    useUserPreferences();
+  const {
+    preferences,
+    toggleWidgetVisibility,
+    updateWidgetColor,
+    updateWidgetLayout,
+  } = useUserPreferences();
+  const { widgetVisibility, widgetColors, widgetLayout } = preferences;
 
-  // Obtener widgets ordenados por posición
-  const sortedWidgets = [...preferences.layout].sort(
-    (a, b) => a.position - b.position,
-  );
+  // Lista de widgets para la configuración
+  const widgets = [
+    { id: "tasks", name: "Lista de Tareas" },
+    { id: "habits", name: "Gráfico de Hábitos" },
+    { id: "progress", name: "Contador de Progreso" },
+    { id: "activity", name: "Actividad Reciente" },
+  ];
 
-  // Mapeo de IDs a nombres amigables
-  const widgetNames = {
-    chart: "Gráfico de Hábitos",
-    counter: "Progreso de Objetivos",
-    list: "Lista de Tareas",
-    summary: "Actividad Reciente",
-  };
+  // Función para manejar cambios en el orden de los widgets
+  const moveWidget = (widgetId, direction) => {
+    const currentIndex = widgetLayout.indexOf(widgetId);
+    const newLayout = [...widgetLayout];
 
-  // Manejar cambio de color
-  const handleColorChange = (colorKey, value) => {
-    updateColors({ [colorKey]: value });
+    if (direction === "up" && currentIndex > 0) {
+      // Intercambiar con el widget anterior
+      [newLayout[currentIndex], newLayout[currentIndex - 1]] = [
+        newLayout[currentIndex - 1],
+        newLayout[currentIndex],
+      ];
+    } else if (direction === "down" && currentIndex < widgetLayout.length - 1) {
+      // Intercambiar con el widget siguiente
+      [newLayout[currentIndex], newLayout[currentIndex + 1]] = [
+        newLayout[currentIndex + 1],
+        newLayout[currentIndex],
+      ];
+    }
+
+    updateWidgetLayout(newLayout);
   };
 
   return (
-    <SettingsContainer>
-      <h1>Configuración del Dashboard</h1>
+    <div className="settings-page">
+      <h2>Configuración del Dashboard</h2>
 
-      <Link to="/">
-        <Button variant="secondary">Volver al Dashboard</Button>
-      </Link>
+      <Card title="Widgets Visibles">
+        <div className="widget-settings">
+          {widgets.map((widget) => (
+            <div key={widget.id} className="widget-setting-item">
+              <label className="widget-setting-label">
+                <input
+                  type="checkbox"
+                  checked={widgetVisibility[widget.id]}
+                  onChange={() => toggleWidgetVisibility(widget.id)}
+                />
+                {widget.name}
+              </label>
+              <div className="widget-setting-controls">
+                <div className="color-picker">
+                  <span>Color:</span>
+                  <input
+                    type="color"
+                    value={widgetColors[widget.id]}
+                    onChange={(e) =>
+                      updateWidgetColor(widget.id, e.target.value)
+                    }
+                  />
+                </div>
+                <div className="order-controls">
+                  <Button
+                    onClick={() => moveWidget(widget.id, "up")}
+                    disabled={widgetLayout.indexOf(widget.id) === 0}
+                    size="small"
+                  >
+                    ↑
+                  </Button>
+                  <Button
+                    onClick={() => moveWidget(widget.id, "down")}
+                    disabled={
+                      widgetLayout.indexOf(widget.id) ===
+                      widgetLayout.length - 1
+                    }
+                    size="small"
+                  >
+                    ↓
+                  </Button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
 
-      <Section>
-        <SectionTitle>Tema</SectionTitle>
-        <ThemeToggle>
-          <Button
-            variant={preferences.theme === "light" ? "primary" : "secondary"}
-            onClick={() => setTheme("light")}
-          >
-            Claro
-          </Button>
-          <Button
-            variant={preferences.theme === "dark" ? "primary" : "secondary"}
-            onClick={() => setTheme("dark")}
-          >
-            Oscuro
-          </Button>
-        </ThemeToggle>
-      </Section>
-
-      <Section>
-        <SectionTitle>Colores</SectionTitle>
-        <ColorOption>
-          <ColorLabel>Color primario:</ColorLabel>
-          <ColorInput
-            type="color"
-            value={preferences.colors.primary}
-            onChange={(e) => handleColorChange("primary", e.target.value)}
-          />
-        </ColorOption>
-        <ColorOption>
-          <ColorLabel>Color secundario:</ColorLabel>
-          <ColorInput
-            type="color"
-            value={preferences.colors.secondary}
-            onChange={(e) => handleColorChange("secondary", e.target.value)}
-          />
-        </ColorOption>
-        <ColorOption>
-          <ColorLabel>Color de acento:</ColorLabel>
-          <ColorInput
-            type="color"
-            value={preferences.colors.accent}
-            onChange={(e) => handleColorChange("accent", e.target.value)}
-          />
-        </ColorOption>
-      </Section>
-
-      <Section>
-        <SectionTitle>Widgets Visibles</SectionTitle>
-        {sortedWidgets.map((widget) => (
-          <WidgetItem key={widget.id}>
-            <WidgetTitle>{widgetNames[widget.id]}</WidgetTitle>
-            <Button
-              variant={widget.visible ? "primary" : "secondary"}
-              onClick={() => toggleWidgetVisibility(widget.id)}
-            >
-              {widget.visible ? "Visible" : "Oculto"}
-            </Button>
-          </WidgetItem>
-        ))}
-      </Section>
-    </SettingsContainer>
+      <div className="settings-actions">
+        <Button variant="primary" onClick={() => (window.location.href = "/")}>
+          Guardar y Volver
+        </Button>
+      </div>
+    </div>
   );
 };
 
