@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 import Card from "../common/Card";
 import { goalProgress } from "../../data/mockData";
+import { useUserPreferences } from "../../context/UserPreferencesContext";
 
 const CounterContainer = styled.div`
   display: flex;
@@ -21,6 +22,10 @@ const ProgressLabel = styled.div`
 `;
 
 const CounterWidget = () => {
+  // Obtener preferencias del usuario
+  const { preferences } = useUserPreferences();
+  const { colors } = preferences;
+
   const { current, target, title } = goalProgress;
   const percentage = (current / target) * 100;
 
@@ -30,7 +35,7 @@ const CounterWidget = () => {
     { name: "Restante", value: target - current },
   ];
 
-  const COLORS = ["#0088FE", "#EEEEEE"];
+  const COLORS = [colors.primary, colors.secondary];
 
   return (
     <Card title={title}>

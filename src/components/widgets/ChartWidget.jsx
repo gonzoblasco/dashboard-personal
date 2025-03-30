@@ -1,4 +1,4 @@
-// src/components/widgets/ChartWidget.jsx
+// src/components/widgets/ChartWidget.jsx (actualizado)
 import React from "react";
 import {
   BarChart,
@@ -11,8 +11,13 @@ import {
 } from "recharts";
 import Card from "../common/Card";
 import { habitData } from "../../data/mockData";
+import { useUserPreferences } from "../../context/UserPreferencesContext";
 
 const ChartWidget = () => {
+  // Obtener preferencias del usuario
+  const { preferences } = useUserPreferences();
+  const { colors } = preferences;
+
   return (
     <Card title="Seguimiento de Hábitos Semanales">
       <ResponsiveContainer width="100%" height={250}>
@@ -29,7 +34,12 @@ const ChartWidget = () => {
               "Completados",
             ]}
           />
-          <Bar dataKey="completed" fill="#8884d8" radius={[4, 4, 0, 0]} />
+          <Bar
+            dataKey="completed"
+            // Usar color de las preferencias
+            fill={colors.secondary}
+            radius={[4, 4, 0, 0]}
+          />
         </BarChart>
       </ResponsiveContainer>
     </Card>

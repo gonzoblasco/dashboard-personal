@@ -1,19 +1,20 @@
-// src/App.jsx
+// src/App.jsx (actualizado)
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import DashboardPage from "./pages/DashboardPage";
-
-// Componente SettingsPage vacío por ahora
-const SettingsPage = () => <div>Página de configuración</div>;
+import SettingsPage from "./pages/SettingsPage";
+import { UserPreferencesProvider } from "./context/UserPreferencesContext";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<DashboardPage />} />
-        <Route path="/settings" element={<SettingsPage />} />
-      </Routes>
-    </BrowserRouter>
+    <UserPreferencesProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<DashboardPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
+        </Routes>
+      </BrowserRouter>
+    </UserPreferencesProvider>
   );
 }
 

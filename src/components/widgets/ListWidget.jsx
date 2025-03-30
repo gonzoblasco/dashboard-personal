@@ -3,6 +3,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import Card from "../common/Card";
 import { tasksList } from "../../data/mockData";
+import { useUserPreferences } from "../../context/UserPreferencesContext";
 
 const TaskList = styled.ul`
   list-style-type: none;
@@ -31,6 +32,9 @@ const TaskText = styled.span`
 `;
 
 const ListWidget = () => {
+  // Obtener preferencias del usuario
+  const { preferences } = useUserPreferences();
+
   return (
     <Card title="Tareas Pendientes">
       <TaskList>

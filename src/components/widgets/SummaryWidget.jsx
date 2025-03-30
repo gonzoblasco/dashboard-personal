@@ -51,6 +51,7 @@ const ActivityContent = styled.div`
 
 const ActivityText = styled.p`
   margin: 0 0 4px 0;
+  color: #333;
 `;
 
 const ActivityTime = styled.span`
