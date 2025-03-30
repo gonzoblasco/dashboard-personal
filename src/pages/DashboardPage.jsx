@@ -32,11 +32,12 @@ const DashboardPage = () => {
   const visibleWidgets = layout
     .filter((widget) => widget.visible)
     .sort((a, b) => a.position - b.position)
-    .map((widget) => widgetComponents[widget.id]);
+    .map((widget) =>
+      React.cloneElement(widgetComponents[widget.id], { key: widget.id }),
+    );
 
   return (
     <div className="dashboard-container">
-      <Header />
       <MainContent theme={theme}>
         <h1>Mi Dashboard</h1>
         <WidgetGrid>{visibleWidgets}</WidgetGrid>

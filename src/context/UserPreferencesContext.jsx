@@ -1,19 +1,20 @@
 // src/context/UserPreferencesContext.jsx
 import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Valores predeterminados para las preferencias
+// Valores por defecto
 const defaultPreferences = {
   theme: "light",
   layout: [
-    { id: "chart", position: 0, visible: true },
-    { id: "counter", position: 1, visible: true },
-    { id: "list", position: 2, visible: true },
-    { id: "summary", position: 3, visible: true },
+    { id: "chart", visible: true, position: 0 },
+    { id: "counter", visible: true, position: 1 },
+    { id: "list", visible: true, position: 2 },
+    { id: "summary", visible: true, position: 3 },
   ],
   colors: {
-    primary: "#1976d2",
-    secondary: "#8884d8",
-    accent: "#4CAF50",
+    primary: "#3498db",
+    secondary: "#2ecc71",
+    accent: "#9b59b6",
+    warning: "#e74c3c",
   },
 };
 
@@ -21,21 +22,12 @@ const defaultPreferences = {
 const UserPreferencesContext = createContext();
 
 // Hook personalizado para acceder al contexto
-export const useUserPreferences = () => {
-  const context = useContext(UserPreferencesContext);
-  if (!context) {
-    throw new Error(
-      "useUserPreferences debe usarse dentro de un UserPreferencesProvider",
-    );
-  }
-  return context;
-};
+export const useUserPreferences = () => useContext(UserPreferencesContext);
 
 // Proveedor del contexto
 export const UserPreferencesProvider = ({ children }) => {
-  // Estado para las preferencias
+  // Intentar cargar preferencias guardadas o usar valores por defecto
   const [preferences, setPreferences] = useState(() => {
-    // Intentar cargar preferencias desde localStorage
     const savedPreferences = localStorage.getItem("userPreferences");
     return savedPreferences ? JSON.parse(savedPreferences) : defaultPreferences;
   });
@@ -47,65 +39,50 @@ export const UserPreferencesProvider = ({ children }) => {
 
   // Función para actualizar preferencias
   const updatePreferences = (newPreferences) => {
-    setPreferences((prev) => ({
-      ...prev,
+    setPreferences((prevPreferences) => ({
+      ...prevPreferences,
       ...newPreferences,
+    }));
+  };
+
+  // Función para actualizar el orden de los widgets
+  const updateWidgetLayout = (newLayout) => {
+    setPreferences((prevPreferences) => ({
+      ...prevPreferences,
+      layout: newLayout,
     }));
   };
 
   // Función para actualizar la visibilidad de un widget
   const toggleWidgetVisibility = (widgetId) => {
-    setPreferences((prev) => ({
-      ...prev,
-      layout: prev.layout.map((widget) =>
-        widget.id === widgetId
-          ? { ...widget, visible: !widget.visible }
-          : widget,
+    setPreferences((prevPreferences) => ({
+      ...prevPreferences,
+      layout: prevPreferences.layout.map(widget => 
+        widget.id === widgetId 
+          ? { ...widget, visible: !widget.visible } 
+          : widget
       ),
     }));
   };
 
-  // Función para reordenar widgets
-  const reorderWidgets = (newOrder) => {
-    setPreferences((prev) => ({
-      ...prev,
-      layout: prev.layout.map((widget, index) => ({
-        ...widget,
-        position:
-          newOrder.indexOf(widget.id) >= 0
-            ? newOrder.indexOf(widget.id)
-            : index,
-      })),
-    }));
-  };
-
-  // Función para cambiar el tema
-  const setTheme = (theme) => {
-    setPreferences((prev) => ({
-      ...prev,
-      theme,
-    }));
-  };
-
-  // Función para actualizar colores
-  const updateColors = (colorUpdate) => {
-    setPreferences((prev) => ({
-      ...prev,
+  // Función para actualizar el color de un widget
+  const updateWidgetColor = (colorKey, color) => {
+    setPreferences((prevPreferences) => ({
+      ...prevPreferences,
       colors: {
-        ...prev.colors,
-        ...colorUpdate,
+        ...prevPreferences.colors,
+        [colorKey]: color,
       },
     }));
   };
 
-  // Valor que se proporcionará a través del contexto
+  // Valor que proporcionará el contexto
   const value = {
     preferences,
     updatePreferences,
+    updateWidgetLayout,
     toggleWidgetVisibility,
-    reorderWidgets,
-    setTheme,
-    updateColors,
+    updateWidgetColor,
   };
 
   return (

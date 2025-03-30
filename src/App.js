@@ -1,19 +1,26 @@
-// src/App.jsx (actualizado)
+// src/App.jsx
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { UserPreferencesProvider } from "./context/UserPreferencesContext";
 import DashboardPage from "./pages/DashboardPage";
 import SettingsPage from "./pages/SettingsPage";
-import { UserPreferencesProvider } from "./context/UserPreferencesContext";
+import Header from "./components/layout/Header";
+import "./App.css";
 
 function App() {
   return (
     <UserPreferencesProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<DashboardPage />} />
-          <Route path="/settings" element={<SettingsPage />} />
-        </Routes>
-      </BrowserRouter>
+      <Router>
+        <div className="app">
+          <Header title="Dashboard Personal" />
+          <main className="main-content">
+            <Routes>
+              <Route path="/" element={<DashboardPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
     </UserPreferencesProvider>
   );
 }
