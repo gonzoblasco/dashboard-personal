@@ -6,7 +6,7 @@ import ListWidget from "../components/widgets/ListWidget";
 import CounterWidget from "../components/widgets/CounterWidget";
 import SummaryWidget from "../components/widgets/SummaryWidget";
 import {
-  taskData,
+  tasksList,
   habitData,
   goalProgress,
   recentActivities,
@@ -29,7 +29,7 @@ const DashboardPage = () => {
             display: widgetVisibility.tasks ? "block" : "none",
           }}
         >
-          <ListWidget tasks={taskData} />
+          <ListWidget tasks={tasksList} />
         </div>
       ),
     },

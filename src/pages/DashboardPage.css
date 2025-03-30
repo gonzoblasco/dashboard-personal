@@ -1,0 +1,11 @@
+/* src/pages/DashboardPage.css */
+.dashboard-page {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.dashboard-page h1 {
+  margin-bottom: 20px;
+  color: #333;
+}

@@ -4,17 +4,18 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 // Valores por defecto
 const defaultPreferences = {
   theme: "light",
-  layout: [
-    { id: "chart", visible: true, position: 0 },
-    { id: "counter", visible: true, position: 1 },
-    { id: "list", visible: true, position: 2 },
-    { id: "summary", visible: true, position: 3 },
-  ],
-  colors: {
-    primary: "#3498db",
-    secondary: "#2ecc71",
-    accent: "#9b59b6",
-    warning: "#e74c3c",
+  widgetLayout: ["tasks", "habits", "progress", "activity"],
+  widgetVisibility: {
+    tasks: true,
+    habits: true,
+    progress: true,
+    activity: true,
+  },
+  widgetColors: {
+    tasks: "#3498db",
+    habits: "#2ecc71",
+    progress: "#9b59b6",
+    activity: "#e74c3c",
   },
 };
 
@@ -49,7 +50,7 @@ export const UserPreferencesProvider = ({ children }) => {
   const updateWidgetLayout = (newLayout) => {
     setPreferences((prevPreferences) => ({
       ...prevPreferences,
-      layout: newLayout,
+      widgetLayout: newLayout,
     }));
   };
 
@@ -57,21 +58,20 @@ export const UserPreferencesProvider = ({ children }) => {
   const toggleWidgetVisibility = (widgetId) => {
     setPreferences((prevPreferences) => ({
       ...prevPreferences,
-      layout: prevPreferences.layout.map(widget => 
-        widget.id === widgetId 
-          ? { ...widget, visible: !widget.visible } 
-          : widget
-      ),
+      widgetVisibility: {
+        ...prevPreferences.widgetVisibility,
+        [widgetId]: !prevPreferences.widgetVisibility[widgetId],
+      },
     }));
   };
 
   // Función para actualizar el color de un widget
-  const updateWidgetColor = (colorKey, color) => {
+  const updateWidgetColor = (widgetId, color) => {
     setPreferences((prevPreferences) => ({
       ...prevPreferences,
-      colors: {
-        ...prevPreferences.colors,
-        [colorKey]: color,
+      widgetColors: {
+        ...prevPreferences.widgetColors,
+        [widgetId]: color,
       },
     }));
   };

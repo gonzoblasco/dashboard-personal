@@ -1,13 +1,21 @@
 // src/components/widgets/ListWidget.jsx (con interactividad)
-import React, { useState, useEffect } from "react";
+import React, { memo, useState } from "react";
+import useLocalData from "../../hooks/useLocalData";
 import styled from "@emotion/styled";
 import Card from "../common/Card";
 import Button from "../common/Button";
 import { tasksList as initialTasksList } from "../../data/mockData";
 import { useUserPreferences } from "../../context/UserPreferencesContext";
 
+// Styled components
+const FilterBar = styled.div`
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+`;
+
 const TaskList = styled.ul`
-  list-style-type: none;
+  list-style: none;
   padding: 0;
   margin: 0;
 `;
@@ -15,16 +23,8 @@ const TaskList = styled.ul`
 const TaskItem = styled.li`
   display: flex;
   align-items: center;
-  padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
-
-  &:last-child {
-    border-bottom: none;
-  }
-
-  &:hover .delete-button {
-    visibility: visible;
-  }
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
 `;
 
 const Checkbox = styled.input`
@@ -32,52 +32,48 @@ const Checkbox = styled.input`
 `;
 
 const TaskText = styled.span`
+  flex-grow: 1;
   text-decoration: ${(props) => (props.completed ? "line-through" : "none")};
-  color: ${(props) => (props.completed ? "#888" : "#333")};
+  color: ${(props) => (props.completed ? "#999" : "inherit")};
 `;
 
 const TaskActions = styled.div`
-  margin-left: auto;
   display: flex;
-  gap: 8px;
-`;
-
-const FilterBar = styled.div`
-  display: flex;
-  gap: 8px;
-  margin-bottom: 12px;
-`;
-
-const NewTaskForm = styled.form`
-  display: flex;
-  margin-top: 12px;
-  border-top: 1px solid #f0f0f0;
-  padding-top: 12px;
-`;
-
-const TaskInput = styled.input`
-  flex: 1;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
 `;
 
 const DeleteButton = styled.button`
   background: none;
   border: none;
   color: #f44336;
+  font-size: 18px;
   cursor: pointer;
-  font-size: 14px;
-  visibility: hidden;
+  padding: 0 8px;
+`;
+
+const NewTaskForm = styled.form`
+  display: flex;
+  margin-top: 16px;
+  gap: 8px;
+`;
+
+const TaskInput = styled.input`
+  flex-grow: 1;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
 `;
 
 const ListWidget = () => {
   // Estado para las tareas
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : initialTasksList;
-  });
+  const [tasks, setTasks] = useLocalData(initialTasksList, "dashboard-tasks");
 
+  const toggleTask = (id) => {
+    setTasks(
+      tasks.map((task) =>
+        task.id === id ? { ...task, completed: !task.completed } : task,
+      ),
+    );
+  };
   // Estado para el nuevo texto de tarea
   const [newTaskText, setNewTaskText] = useState("");
 
@@ -89,7 +85,7 @@ const ListWidget = () => {
   const { colors } = preferences;
 
   // Guardar tareas en localStorage cuando cambien
-  useEffect(() => {
+  React.useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
 
@@ -163,7 +159,10 @@ const ListWidget = () => {
             />
             <TaskText completed={task.completed}>{task.text}</TaskText>
             <TaskActions>
-              <DeleteButton className="delete-button" onClick={() => handleDeleteTask(task.id)}>
+              <DeleteButton
+                className="delete-button"
+                onClick={() => handleDeleteTask(task.id)}
+              >
                 ×
               </DeleteButton>
             </TaskActions>
@@ -186,4 +185,4 @@ const ListWidget = () => {
   );
 };
 
-export default ListWidget;
+export default memo(ListWidget);
