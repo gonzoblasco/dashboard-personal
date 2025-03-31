@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+# Dashboard Personal
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Un dashboard interactivo y personalizable construido con React que permite visualizar y gestionar información personal a través de diferentes widgets.
 
-## Available Scripts
+![Dashboard Preview](https://via.placeholder.com/800x400?text=Dashboard+Personal+Preview)
 
-In the project directory, you can run:
+## Características
 
-### `npm start`
+- **Interfaz personalizable**: Cambia el tema (claro/oscuro), colores y disposición de los widgets según tus preferencias
+- **Persistencia de datos**: Tus preferencias y datos se guardan automáticamente en el navegador
+- **Widgets interactivos**:
+  - **Lista de tareas**: Gestiona tus tareas pendientes con funcionalidad completa (añadir, completar, eliminar)
+  - **Gráficos**: Visualiza datos con gráficos interactivos
+  - **Contadores**: Realiza seguimiento de métricas importantes
+  - **Resúmenes**: Visualiza información resumida de manera clara
+- **Diseño responsive**: Adaptable a diferentes tamaños de pantalla
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Tecnologías utilizadas
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **React 19**: Biblioteca JavaScript para construir interfaces de usuario
+- **React Router**: Para la navegación entre páginas
+- **Emotion**: Para estilos con CSS-in-JS
+- **Recharts**: Para la visualización de datos con gráficos
+- **LocalStorage API**: Para la persistencia de datos en el navegador
+- **Context API**: Para la gestión del estado global
 
-### `npm test`
+## Instalación
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clona este repositorio:
+   ```bash
+   git clone https://github.com/gonzoblasco/dashboard-personal.git
+   cd dashboard-personal
+   ```
 
-### `npm run build`
+2. Instala las dependencias:
+   ```bash
+   npm install
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3. Inicia la aplicación en modo desarrollo:
+   ```bash
+   npm start
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Abre [http://localhost:3000](http://localhost:3000) para verla en tu navegador.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Uso
 
-### `npm run eject`
+### Personalización del dashboard
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+1. Accede a la página de configuración haciendo clic en el icono de ajustes
+2. Cambia el tema entre claro y oscuro
+3. Personaliza los colores de la aplicación
+4. Activa o desactiva widgets según tus necesidades
+5. Reorganiza los widgets arrastrándolos a la posición deseada
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Gestión de tareas
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+El widget de lista de tareas te permite:
+- Añadir nuevas tareas
+- Marcar tareas como completadas
+- Filtrar tareas por estado (todas, activas, completadas)
+- Eliminar tareas
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Visualización de datos
 
-## Learn More
+Los widgets de gráficos y contadores muestran información visual de tus datos, permitiéndote:
+- Ver tendencias a lo largo del tiempo
+- Identificar patrones
+- Realizar seguimiento de métricas importantes
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Scripts disponibles
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- `npm start`: Ejecuta la aplicación en modo desarrollo
+- `npm test`: Lanza el ejecutor de pruebas
+- `npm run build`: Construye la aplicación para producción
+- `npm run eject`: Expone la configuración de Create React App
 
-### Code Splitting
+## Estructura del proyecto
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+```
+dashboard-personal/
+├── public/                  # Archivos estáticos
+├── src/                     # Código fuente
+│   ├── components/          # Componentes React
+│   │   ├── common/          # Componentes comunes (botones, tarjetas, etc.)
+│   │   ├── layout/          # Componentes de estructura (header, grid, etc.)
+│   │   └── widgets/         # Widgets del dashboard
+│   ├── context/             # Contextos de React (preferencias de usuario)
+│   ├── data/                # Datos mock y utilidades
+│   ├── pages/               # Componentes de página
+│   ├── App.js               # Componente principal
+│   └── index.js             # Punto de entrada
+└── package.json             # Dependencias y scripts
+```
 
-### Analyzing the Bundle Size
+## Contribución
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+Las contribuciones son bienvenidas. Para cambios importantes, por favor abre primero un issue para discutir lo que te gustaría cambiar.
 
-### Making a Progressive Web App
+## Autor
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+Desarrollado por [Gonzalo Blasco](https://github.com/gonzoblasco)
 
-### Advanced Configuration
+## Licencia
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+[MIT](https://choosealicense.com/licenses/mit/)
