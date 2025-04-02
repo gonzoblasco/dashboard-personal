@@ -16,7 +16,7 @@ const TaskItem = styled.li`
   display: flex;
   align-items: center;
   padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid ${props => props.theme === 'dark' ? '#444' : '#f0f0f0'};
 
   &:last-child {
     border-bottom: none;
@@ -33,7 +33,14 @@ const Checkbox = styled.input`
 
 const TaskText = styled.span`
   text-decoration: ${(props) => (props.completed ? "line-through" : "none")};
-  color: ${(props) => (props.completed ? "#888" : "#333")};
+  color: ${(props) => {
+    if (props.theme === 'dark') {
+      return props.completed ? "#888" : "#ffffff";
+    } else {
+      return props.completed ? "#888" : "#333";
+    }
+  }};
+  font-weight: ${(props) => (props.theme === 'dark' && !props.completed ? "500" : "normal")};
 `;
 
 const TaskActions = styled.div`
@@ -65,10 +72,11 @@ const TaskInput = styled.input`
 const DeleteButton = styled.button`
   background: none;
   border: none;
-  color: #f44336;
+  color: ${props => props.theme === 'dark' ? '#ff6b6b' : '#f44336'};
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   visibility: hidden;
+  font-weight: bold;
 `;
 
 const ListWidget = () => {
@@ -86,7 +94,7 @@ const ListWidget = () => {
 
   // Obtener preferencias del usuario
   const { preferences } = useUserPreferences();
-  const { colors } = preferences;
+  const { colors, theme } = preferences;
 
   // Guardar tareas en localStorage cuando cambien
   useEffect(() => {
@@ -155,15 +163,15 @@ const ListWidget = () => {
 
       <TaskList>
         {filteredTasks.map((task) => (
-          <TaskItem key={task.id}>
+          <TaskItem key={task.id} theme={theme}>
             <Checkbox
               type="checkbox"
               checked={task.completed}
               onChange={() => handleToggleComplete(task.id)}
             />
-            <TaskText completed={task.completed}>{task.text}</TaskText>
+            <TaskText completed={task.completed} theme={theme}>{task.text}</TaskText>
             <TaskActions>
-              <DeleteButton className="delete-button" onClick={() => handleDeleteTask(task.id)}>
+              <DeleteButton className="delete-button" onClick={() => handleDeleteTask(task.id)} theme={theme}>
                 ×
               </DeleteButton>
             </TaskActions>
@@ -177,6 +185,11 @@ const ListWidget = () => {
           placeholder="Agregar nueva tarea..."
           value={newTaskText}
           onChange={(e) => setNewTaskText(e.target.value)}
+          style={{
+            backgroundColor: theme === 'dark' ? '#333' : '#fff',
+            color: theme === 'dark' ? '#fff' : '#333',
+            borderColor: theme === 'dark' ? '#444' : '#ddd'
+          }}
         />
         <Button type="submit" style={{ backgroundColor: colors.primary }}>
           Agregar

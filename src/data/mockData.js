@@ -44,3 +44,79 @@ export const recentActivities = [
     timestamp: "2023-09-08T20:00:00Z",
   },
 ];
+
+// Data for multi-chart visualization widget
+export const productivityData = [
+  {
+    date: "Ene",
+    focusTime: 4.2,
+    tasksCompleted: 15,
+    efficiency: 68
+  },
+  {
+    date: "Feb",
+    focusTime: 5.8,
+    tasksCompleted: 22,
+    efficiency: 75
+  },
+  {
+    date: "Mar",
+    focusTime: 6.5,
+    tasksCompleted: 28,
+    efficiency: 82
+  },
+  {
+    date: "Abr",
+    focusTime: 5.9,
+    tasksCompleted: 25,
+    efficiency: 79
+  },
+  {
+    date: "May",
+    focusTime: 7.1,
+    tasksCompleted: 30,
+    efficiency: 86
+  },
+  {
+    date: "Jun",
+    focusTime: 6.8,
+    tasksCompleted: 27,
+    efficiency: 84
+  },
+  {
+    date: "Jul",
+    focusTime: 6.2,
+    tasksCompleted: 24,
+    efficiency: 78
+  },
+  {
+    date: "Ago",
+    focusTime: 7.5,
+    tasksCompleted: 32,
+    efficiency: 89
+  },
+  {
+    date: "Sep",
+    focusTime: 8.1,
+    tasksCompleted: 35,
+    efficiency: 92
+  },
+  {
+    date: "Oct",
+    focusTime: 7.8,
+    tasksCompleted: 33,
+    efficiency: 88
+  },
+  {
+    date: "Nov",
+    focusTime: 6.9,
+    tasksCompleted: 29,
+    efficiency: 85
+  },
+  {
+    date: "Dic",
+    focusTime: 5.4,
+    tasksCompleted: 20,
+    efficiency: 74
+  }
+];

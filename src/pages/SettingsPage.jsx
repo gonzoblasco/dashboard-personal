@@ -13,16 +13,43 @@ const SettingsContainer = styled.div`
 
 const Section = styled.section`
   margin-bottom: 32px;
-  background: white;
+  background: ${props => props.theme === 'dark' ? '#1e1e1e' : 'white'};
   padding: 24px;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: ${props => props.theme === 'dark' ? '#e0e0e0' : 'inherit'};
 `;
 
 const SectionTitle = styled.h2`
   margin-top: 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid ${props => props.theme === 'dark' ? '#333' : '#f0f0f0'};
   padding-bottom: 12px;
+`;
+
+const SectionDescription = styled.p`
+  color: ${props => props.theme === 'dark' ? '#a0a0a0' : '#666'};
+  font-size: 14px;
+  margin-bottom: 16px;
+`;
+
+const InfoBox = styled.div`
+  display: flex;
+  align-items: center;
+  background: ${props => props.theme === 'dark' ? '#2a2a2a' : '#f0f8ff'};
+  border-left: 4px solid ${props => props.theme === 'dark' ? '#4a90e2' : '#3498db'};
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  
+  svg {
+    margin-right: 12px;
+    min-width: 24px;
+  }
+  
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
 `;
 
 const ColorOption = styled.div`
@@ -49,7 +76,7 @@ const WidgetItem = styled.div`
   justify-content: space-between;
   padding: 12px;
   margin-bottom: 8px;
-  background: #f9f9f9;
+  background: ${props => props.theme === 'dark' ? '#2a2a2a' : '#f9f9f9'};
   border-radius: 4px;
 `;
 
@@ -62,9 +89,18 @@ const ThemeToggle = styled.div`
   gap: 12px;
 `;
 
+const MainTitle = styled.h1`
+  color: ${props => props.theme === 'dark' ? '#e0e0e0' : 'inherit'};
+`;
+
+const BackButtonContainer = styled.div`
+  margin-bottom: 20px;
+`;
+
 const SettingsPage = () => {
-  const { preferences, toggleWidgetVisibility, updateColors, setTheme } =
+  const { preferences, toggleWidgetVisibility, updateWidgetColor, updatePreferences } =
     useUserPreferences();
+  const { theme, colors } = preferences;
 
   // Obtener widgets ordenados por posición
   const sortedWidgets = [...preferences.layout].sort(
@@ -77,41 +113,47 @@ const SettingsPage = () => {
     counter: "Progreso de Objetivos",
     list: "Lista de Tareas",
     summary: "Actividad Reciente",
+    visualization: "Análisis de Productividad",
+    weather: "Pronóstico del Tiempo",
   };
 
   // Manejar cambio de color
   const handleColorChange = (colorKey, value) => {
-    updateColors({ [colorKey]: value });
+    updateWidgetColor(colorKey, value);
   };
+  
+  // This function is now handled directly with updatePreferences
 
   return (
     <SettingsContainer>
-      <h1>Configuración del Dashboard</h1>
+      <MainTitle theme={theme}>Configuración del Dashboard</MainTitle>
 
-      <Link to="/">
-        <Button variant="secondary">Volver al Dashboard</Button>
-      </Link>
+      <BackButtonContainer>
+        <Link to="/">
+          <Button variant="secondary">Volver al Dashboard</Button>
+        </Link>
+      </BackButtonContainer>
 
-      <Section>
-        <SectionTitle>Tema</SectionTitle>
+      <Section theme={theme}>
+        <SectionTitle theme={theme}>Tema</SectionTitle>
         <ThemeToggle>
           <Button
-            variant={preferences.theme === "light" ? "primary" : "secondary"}
-            onClick={() => setTheme("light")}
+            variant={theme === "light" ? "primary" : "secondary"}
+            onClick={() => updatePreferences({ theme: "light" })}
           >
             Claro
           </Button>
           <Button
-            variant={preferences.theme === "dark" ? "primary" : "secondary"}
-            onClick={() => setTheme("dark")}
+            variant={theme === "dark" ? "primary" : "secondary"}
+            onClick={() => updatePreferences({ theme: "dark" })}
           >
             Oscuro
           </Button>
         </ThemeToggle>
       </Section>
 
-      <Section>
-        <SectionTitle>Colores</SectionTitle>
+      <Section theme={theme}>
+        <SectionTitle theme={theme}>Colores</SectionTitle>
         <ColorOption>
           <ColorLabel>Color primario:</ColorLabel>
           <ColorInput
@@ -138,10 +180,31 @@ const SettingsPage = () => {
         </ColorOption>
       </Section>
 
-      <Section>
-        <SectionTitle>Widgets Visibles</SectionTitle>
+      <Section theme={theme}>
+        <SectionTitle theme={theme}>Widgets</SectionTitle>
+        
+        <InfoBox theme={theme}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" 
+              stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 16V12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <path d="M12 8H12.01" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+          <p><strong>¡Nuevo!</strong> Ahora puedes reordenar tus widgets directamente en el dashboard. Simplemente arrastra y suelta los widgets para cambiar su posición.</p>
+        </InfoBox>
+        
+        <InfoBox theme={theme} style={{ background: theme === 'dark' ? '#2a2f3a' : '#f0f8ff', borderLeftColor: colors.accent }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16 6L18.29 8.29L13.41 13.17L9.41 9.17L2 16.59L3.41 18L9.41 12L13.41 16L19.71 9.71L22 12V6H16Z" 
+              stroke="currentColor" fill="currentColor"/>
+          </svg>
+          <p><strong>¡Widget nuevo!</strong> Se ha añadido un nuevo widget de "Análisis de Productividad" con gráficos interactivos. Visualiza tus datos de productividad con múltiples filtros y métricas.</p>
+        </InfoBox>
+        
+        <SectionDescription theme={theme}>Controla qué widgets quieres mostrar en tu dashboard:</SectionDescription>
+        
         {sortedWidgets.map((widget) => (
-          <WidgetItem key={widget.id}>
+          <WidgetItem key={widget.id} theme={theme}>
             <WidgetTitle>{widgetNames[widget.id]}</WidgetTitle>
             <Button
               variant={widget.visible ? "primary" : "secondary"}
